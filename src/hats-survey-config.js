@@ -1,6 +1,3 @@
-/**
- * HaTS Survey Configurations
- */
 
 /**
  * Config item object structure;

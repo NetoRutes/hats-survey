@@ -1,1 +1,30 @@
-# Hats Survey in only one place
+# This is the Hats Survey NPM package to all the About Repositories
+
+# How to install
+`npm install --save git+https://github.com/NetoRutes/hats-survey#v1.0.0`
+
+
+## Edit in your gulp constants.js
+### for closure
+const hatsSurveyPath = 'node_modules/hats-survey/dist/closure/';
+
+### for ts or js
+const hatsSurveyPath = 'node_modules/hats-survey/dist/js/';
+
+
+# How to contribute:
+Edit the files `hats-survey` and `hats-survey-config`
+
+## NODE + NPM versions
+Node = v10.15.3
+NPM = 6.4.1
+
+## Install dependencies
+`npm install`
+
+## Build before publish
+Before publish definitly you need to build the files 
+to concat the imports, exports and 
+closure modules declaration
+
+`npm run build`

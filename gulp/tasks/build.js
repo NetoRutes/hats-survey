@@ -1,32 +1,40 @@
 'use strict';
 
 const gulp = require('gulp');
-const logger = require('./../logger');
-const divider = Array(73).fill('*').join('');
+const header = require('gulp-header');
 
 /**
- * Registers the `gulp build` and `gulp build:kokoro` tasks that build and lint
- * the front end for the project.
+ * Registers the `gulp build` task that build the FE
  */
 module.exports = () => {
 
-  // Build for running locally.
-  gulp.task('build', ['js', 'sass', 'lint:js', 'lint:sass', 'generate']);
+  // concat header of Closure files
+  gulp.task('closure-survey', gulp.series(() => {
+    return gulp.src('./src/hats-survey.js')
+      .pipe(header('const HaTSSurveyConfig = goog.require(\'hats-survey-config\');\n'))
+      .pipe(header('goog.module(\'hats-survey\');\n\n'))
+      .pipe(gulp.dest('./dist/closure/'))
+  }));
 
-  // Build for running on Kokoro CI and failing with the proper exit code.
-  gulp.task('build:kokoro',
-      ['js', 'sass', 'lint:js', 'lint:sass'], function() {
-    if (logger.errors.length) {
-      logger.log('build:kokoro',
-          '\n' + divider + '\n\n' +
-          '                       😭 Kokoro build failed. 😭' +
-          '\n\n' + divider);
-      process.exit(1);
-    } else {
-      logger.log('build:kokoro',
-          '\n' + divider + '\n\n' +
-          '                       🔥 Kokoro build passed! 🔥' +
-          '\n\n' + divider);
-    }
-  });
+  gulp.task('closure-survey-config', gulp.series(() => {
+    return gulp.src('./src/hats-survey-config.js')
+      .pipe(header('goog.module(\'hats-survey-config\');\n'))
+      .pipe(gulp.dest('./dist/closure/'))
+  }));
+
+  // concat header of JS files
+  gulp.task('js-survey', gulp.series(() => {
+    return gulp.src('./src/hats-survey.js')
+      .pipe(header('import {HaTSSurveyConfig} from \'./hats-survey-config.js\';\n\n'))
+      .pipe(gulp.dest('./dist/js/'))
+  }));
+
+  gulp.task('js-survey-config', gulp.series(() => {
+    return gulp.src('./src/hats-survey-config.js')
+      .pipe(gulp.dest('./dist/js/'))
+  }));
+
+  // Build use in dev and prod.
+  gulp.task('build', gulp.series('closure-survey', 'closure-survey-config', 'js-survey', 'js-survey-config'));
+
 };
