@@ -1,11 +1,6 @@
-/*
- * HaTS Survey Code
- *
- * http://go/hats/client/concepts
- *
- */
-import {HaTSSurveyConfig} from './hats-survey-config.js';
+goog.module('hats-survey');
 
+const HaTSSurveyConfig = goog.require('hats-survey-config');
 const HATS_API_KEY='AIzaSyDaoWAJaYsq3ER88uZjv6n5oADyRxBx4eI';
 
 export class HaTSSurvey {
